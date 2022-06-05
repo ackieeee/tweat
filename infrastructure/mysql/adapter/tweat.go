@@ -9,12 +9,14 @@ import (
 )
 
 func Tweat() *sqlx.DB {
-	host := os.Getenv("MYSQL_TWEAT_HOST")
-	user := os.Getenv("MYSQL_TWEAT_USER")
-	password := os.Getenv("MYSQL_TWEAT_PASSWORD")
-	port := os.Getenv("MYSQL_TWEAT_PORT")
-	dbName := os.Getenv("MYSQL_TWEAT_DATABASE")
-	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s", user, password, host, port, dbName)
+	dsn := fmt.Sprintf(
+		"%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True",
+		os.Getenv("MYSQL_TWEAT_USER"),
+		os.Getenv("MYSQL_TWEAT_PASSWORD"),
+		os.Getenv("MYSQL_TWEAT_HOST"),
+		os.Getenv("MYSQL_TWEAT_PORT"),
+		os.Getenv("MYSQL_TWEAT_DATABASE"),
+	)
 
 	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {

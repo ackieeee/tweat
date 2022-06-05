@@ -12,14 +12,14 @@ type tweatRepository struct {
 }
 
 type TweatRepository interface {
-	GetAll(ctx context.Context) (entity.Tweats, error)
+	GetAll(ctx context.Context) (entity.TweatAlls, error)
 }
 
 func NewTweatRepository() TweatRepository {
 	return &tweatRepository{}
 }
 
-func (tr *tweatRepository) GetAll(ctx context.Context) (entity.Tweats, error) {
+func (tr *tweatRepository) GetAll(ctx context.Context) (entity.TweatAlls, error) {
 	db := adapter.Tweat()
 	tx, err := db.Beginx()
 	if err != nil {

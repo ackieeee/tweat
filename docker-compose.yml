@@ -6,11 +6,11 @@ services:
         container_name: tweat-appserver
         tty: true
         environment:
-            - MYSQL_USER=tweat
-            - MYSQL_PASSWORD=tweat
-            - MYSQL_HOST=tweat
-            - MYSQL_PORT=3306
-            - MYSQL_DATABASE=tweat
+            - MYSQL_TWEAT_USER=tweat
+            - MYSQL_TWEAT_PASSWORD=tweat
+            - MYSQL_TWEAT_HOST=db
+            - MYSQL_TWEAT_PORT=3306
+            - MYSQL_TWEAT_DATABASE=tweat
         ports:
             - 3000:3000
         volumes:

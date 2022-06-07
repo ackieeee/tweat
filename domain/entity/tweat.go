@@ -1,5 +1,14 @@
 package entity
 
+type TweatLikes struct {
+	ID     int    `db:"id"`
+	Text   string `db:"text"`
+	UserID int    `db:"user_id"`
+	Likes  int    `db:"likes_count"`
+}
+
+type TweatLikesList []TweatLikes
+
 type Tweat struct {
 	ID           int    `db:"id"`
 	Text         string `db:"text"`
@@ -33,10 +42,11 @@ func (ts Tweats) Convert() TweatAlls {
 	return tweats
 }
 
-type TweatAlls []*TweatAll
 type TweatAll struct {
 	ID     int
 	Text   string
 	UserID int
 	Likes  int
 }
+
+type TweatAlls []*TweatAll

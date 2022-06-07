@@ -17,19 +17,19 @@ func NewMysql(db *sqlx.Tx) *TweatMysql {
 	return &TweatMysql{db}
 }
 
-func (m *TweatMysql) GetAll() (entity.TweatAlls, error) {
-	likesRows, err := m.db.Queryx("SELECT tweats.id, tweats.text, tweats.user_id, likes.tweat_id as likes_tweat_id FROM tweats INNER JOIN likes ON `tweats`.id=`likes`.tweat_id")
+func (m *TweatMysql) GetAll() (entity.TweatLikesList, error) {
+	likesRows, err := m.db.Queryx("SELECT tweats.id, tweats.text, tweats.user_id, count(likes.id) likes_count FROM tweats INNER JOIN likes ON `tweats`.id=`likes`.tweat_id GROUP BY tweats.id")
 	if err != nil {
 		return nil, err
 	}
 
-	tweats := entity.Tweats{}
+	tweats := entity.TweatLikesList{}
 	for likesRows.Next() {
-		var tweat entity.Tweat
+		var tweat entity.TweatLikes
 		if err := likesRows.StructScan(&tweat); err != nil {
 			return nil, err
 		}
 		tweats = append(tweats, tweat)
 	}
-	return tweats.Convert(), nil
+	return tweats, nil
 }

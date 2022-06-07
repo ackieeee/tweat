@@ -30,6 +30,7 @@ services:
         volumes:
             - ./data:/data
             - ./database/sql:/docker-entrypoint-initdb.d
+            - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
         healthcheck:
             test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
             timeout: 5s

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gba-3/tweat/handler"
+	mw "github.com/gba-3/tweat/middleware"
 	"github.com/gba-3/tweat/registry"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -15,6 +16,7 @@ func main() {
 
 	ah := registry.NewRegistry()
 	r.Route("/tweats", func(r chi.Router) {
+		r.Use(mw.WithToken)
 		r.Get("/", handler.JsonHandler(ah.Th.GetAll).ServeHTTP)
 	})
 	http.ListenAndServe(":3000", r)

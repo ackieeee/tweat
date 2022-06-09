@@ -19,5 +19,8 @@ func main() {
 		r.Use(mw.WithToken)
 		r.Get("/", handler.JsonHandler(ah.Th.GetAll).ServeHTTP)
 	})
+	r.Route("/login", func(r chi.Router) {
+		r.Post("/", handler.JsonHandler(ah.Uh.FindByEmail).ServeHTTP)
+	})
 	http.ListenAndServe(":3000", r)
 }

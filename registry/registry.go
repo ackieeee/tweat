@@ -10,5 +10,10 @@ func NewRegistry() *AppHandler {
 				c.GetTweatRepository(),
 			),
 		),
+		c.GetUserHandler(
+			c.GetUserUsecase(
+				c.GetUserRepository(),
+			),
+		),
 	)
 }

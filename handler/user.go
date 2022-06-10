@@ -76,6 +76,13 @@ func (uh *userHandler) Login(w http.ResponseWriter, r *http.Request) (int, inter
 		return http.StatusBadRequest, err.Error(), err
 	}
 
+	// パスワード検証
+	// 第一引数がハッシュ化されたパスワード(DBに保存されているパスワード)
+	// 第二引数が入力されたパスワード(メッセージボディに付与されたパスワード)
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userBody.Password)); err != nil {
+		return http.StatusBadRequest, err.Error(), err
+	}
+
 	// jwt token
 	claims := jwt.StandardClaims{
 		Issuer:    strconv.Itoa(user.ID),

@@ -13,6 +13,7 @@ type userRepository struct {
 
 type UserRepository interface {
 	FindByEmail(email string, password string) (*entity.User, error)
+	CreateUser(name string, email string, password string) error
 }
 
 func NewUserRepository() UserRepository {
@@ -29,4 +30,18 @@ func (ur *userRepository) FindByEmail(email string, password string) (*entity.Us
 
 	db := adapter.Tweat()
 	return mysql.NewUserMysql(db).FindByEmail(email)
+}
+
+func (ur *userRepository) CreateUser(name string, email string, password string) error {
+	if name == "" {
+		return errors.New("arguments error: name is emtpy.")
+	}
+	if email == "" {
+		return errors.New("arguments error: email is emtpy.")
+	}
+	if password == "" {
+		return errors.New("arguments error: password is emtpy.")
+	}
+	db := adapter.Tweat()
+	return mysql.NewUserMysql(db).CreateUser(name, email, password)
 }

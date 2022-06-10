@@ -10,6 +10,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gba-3/tweat/domain/entity"
 	"github.com/gba-3/tweat/usecase"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userHandler struct {
@@ -17,11 +18,40 @@ type userHandler struct {
 }
 
 type UserHandler interface {
+	Signup(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 	Login(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 }
 
 func NewUserHandler(uu usecase.UserUsecase) UserHandler {
 	return &userHandler{uu}
+}
+
+func (uh *userHandler) Signup(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+	// body, err := ioutil.ReadAll(r.Body)
+	// if err != nil {
+	// 	return http.StatusBadRequest, err.Error(), err
+	// }
+	defer r.Body.Close()
+
+	userBody := entity.User{}
+	if err := json.NewDecoder(r.Body).Decode(&userBody); err != nil {
+		return http.StatusInternalServerError, err.Error(), err
+	}
+
+	// GenerateFromPasswordでパスワードをハッシュ化
+	// 第2引数はコスト
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userBody.Password), 10)
+	if err != nil {
+		return http.StatusInternalServerError, err.Error(), err
+	}
+	if err := uh.uu.CreateUser(userBody.Name, userBody.Email, string(hashedPassword)); err != nil {
+		return http.StatusBadRequest, err.Error(), err
+	}
+
+	res := map[string]string{
+		"message": "successed create user.",
+	}
+	return http.StatusCreated, res, nil
 }
 
 func (uh *userHandler) Login(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {

@@ -28,6 +28,9 @@ func main() {
 		r.Use(mw.WithToken)
 		r.Get("/", handler.JsonHandler(ah.Th.GetAll).ServeHTTP)
 	})
+	r.Route("/signup", func(r chi.Router) {
+		r.Post("/", handler.JsonHandler(ah.Uh.Signup).ServeHTTP)
+	})
 	r.Route("/login", func(r chi.Router) {
 		r.Post("/", handler.JsonHandler(ah.Uh.Login).ServeHTTP)
 	})

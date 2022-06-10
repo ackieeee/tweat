@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gba-3/tweat/domain/entity"
 	"github.com/gba-3/tweat/usecase"
 )
@@ -42,5 +45,19 @@ func (uh *userHandler) FindByEmail(w http.ResponseWriter, r *http.Request) (int,
 	if err != nil {
 		return http.StatusBadRequest, err.Error(), err
 	}
-	return http.StatusOK, user, nil
+
+	// jwt token
+	claims := jwt.StandardClaims{
+		Issuer:    strconv.Itoa(user.ID),
+		ExpiresAt: time.Now().Add(time.Hour * 1).Unix(),
+	}
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := jwtToken.SignedString([]byte("secret"))
+	if err != nil {
+		return http.StatusInternalServerError, err.Error(), err
+	}
+	res := map[string]string{
+		"token": token,
+	}
+	return http.StatusOK, res, nil
 }

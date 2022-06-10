@@ -17,14 +17,14 @@ type userHandler struct {
 }
 
 type UserHandler interface {
-	FindByEmail(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
+	Login(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 }
 
 func NewUserHandler(uu usecase.UserUsecase) UserHandler {
 	return &userHandler{uu}
 }
 
-func (uh *userHandler) FindByEmail(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+func (uh *userHandler) Login(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return http.StatusBadRequest, err.Error(), err

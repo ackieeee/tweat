@@ -29,7 +29,7 @@ func main() {
 		r.Get("/", handler.JsonHandler(ah.Th.GetAll).ServeHTTP)
 	})
 	r.Route("/login", func(r chi.Router) {
-		r.Post("/", handler.JsonHandler(ah.Uh.FindByEmail).ServeHTTP)
+		r.Post("/", handler.JsonHandler(ah.Uh.Login).ServeHTTP)
 	})
 	http.ListenAndServe(":3000", r)
 }

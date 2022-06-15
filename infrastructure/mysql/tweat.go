@@ -17,8 +17,8 @@ func NewMysql(db *sqlx.Tx) *TweatMysql {
 	return &TweatMysql{db}
 }
 
-func (m *TweatMysql) GetAll() (entity.TweatLikesList, error) {
-	likesRows, err := m.db.Queryx("SELECT tweats.id, tweats.text, tweats.user_id, count(likes.id) likes_count FROM tweats INNER JOIN likes ON `tweats`.id=`likes`.tweat_id GROUP BY tweats.id")
+func (m *TweatMysql) GetAll(userID string) (entity.TweatLikesList, error) {
+	likesRows, err := m.db.Queryx("SELECT tweats.id, tweats.text, tweats.user_id, count(likes.id) likes_count FROM tweats INNER JOIN likes ON `tweats`.id=`likes`.tweat_id WHERE `tweats`.user_id=? GROUP BY tweats.id", userID)
 	if err != nil {
 		return nil, err
 	}

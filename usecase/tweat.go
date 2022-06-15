@@ -12,15 +12,15 @@ type tweatUsecase struct {
 }
 
 type TweatUsecase interface {
-	GetAll(ctx context.Context) (entity.TweatLikesList, error)
+	GetAll(ctx context.Context, userID string) (entity.TweatLikesList, error)
 }
 
 func NewTweatUsecase(tr repository.TweatRepository) TweatUsecase {
 	return &tweatUsecase{tr}
 }
 
-func (tu *tweatUsecase) GetAll(ctx context.Context) (entity.TweatLikesList, error) {
-	tweats, err := tu.tr.GetAll(ctx)
+func (tu *tweatUsecase) GetAll(ctx context.Context, userID string) (entity.TweatLikesList, error) {
+	tweats, err := tu.tr.GetAll(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

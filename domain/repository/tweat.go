@@ -12,20 +12,20 @@ type tweatRepository struct {
 }
 
 type TweatRepository interface {
-	GetAll(ctx context.Context) (entity.TweatLikesList, error)
+	GetAll(ctx context.Context, userID string) (entity.TweatLikesList, error)
 }
 
 func NewTweatRepository() TweatRepository {
 	return &tweatRepository{}
 }
 
-func (tr *tweatRepository) GetAll(ctx context.Context) (entity.TweatLikesList, error) {
+func (tr *tweatRepository) GetAll(ctx context.Context, userID string) (entity.TweatLikesList, error) {
 	db := adapter.Tweat()
 	tx, err := db.Beginx()
 	if err != nil {
 		return nil, err
 	}
-	tweats, err := mysql.NewMysql(tx).GetAll()
+	tweats, err := mysql.NewMysql(tx).GetAll(userID)
 
 	if err != nil {
 		tx.Rollback()

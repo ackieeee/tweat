@@ -1,0 +1,44 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger test
+  description: Swagger description
+servers:
+  - url: http://localhost:3000
+    description: ローカルAPI
+paths:
+  /tweats:
+    get:
+      description: tweat一覧 取得
+      responses:
+        '200':
+          description: tweat一覧 レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_tweat_response'
+components:
+  schemas:
+    user_id:
+      description: ユーザ識別子
+      type: integer
+      example: 1
+      # pattern: '[0-9]'
+    likes:
+      description: いいね数識別子
+      type: integer
+      example: 5
+    get_tweat_response:
+      description: tweatレスポンス
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        text:
+          type: string
+          example: sample tweat
+        user_id:
+          $ref: '#/components/schemas/user_id'
+        likes:
+          $ref: '#/components/schemas/likes'

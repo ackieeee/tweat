@@ -17,6 +17,7 @@ func WithToken(next http.Handler) http.Handler {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 
+		// ユーザーIDをコンテキストに渡す
 		ctx := context.WithValue(r.Context(), "userID", userID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -30,6 +31,7 @@ func verifyToken(tokenString string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// JWTのペイロードからユーザーIDを取得
 	claims := token.Claims.(jwt.MapClaims)
 	userID := claims["iss"].(string)
 	return userID, nil

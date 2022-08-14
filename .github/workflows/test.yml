@@ -1,0 +1,14 @@
+name: unit test
+on: ["push"]
+jobs:
+  UnitTest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+      - name: Run Unit Test
+        run: |
+          go test ./... -count 1

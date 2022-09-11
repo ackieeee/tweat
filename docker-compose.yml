@@ -12,7 +12,7 @@ services:
             - MYSQL_TWEAT_PORT=3306
             - MYSQL_TWEAT_DATABASE=tweat
         ports:
-            - 3000:3000
+            - 3030:3030
         volumes:
             - ./:/app
     db:

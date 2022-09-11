@@ -2,11 +2,11 @@
 ## 実行例
 ### signup
 ```
-curl -X POST http://localhost:3000/signup -d '{"name":"testname", "email":"testmail@email.com","password":"testpass"}'
+curl -X POST http://localhost:3030/signup -d '{"name":"testname", "email":"testmail@email.com","password":"testpass"}'
 ```
 ### login
 ```
-curl -X POST http://localhost:3000/login -d '{"email":"testmail@email.com","password":"testpass"}'
+curl -X POST http://localhost:3030/login -d '{"email":"test1@test.email.com", "password":"testpass"}'
 ```
 
 ### tweat一覧

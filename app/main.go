@@ -2,8 +2,10 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/gba-3/gologger"
 	"github.com/gba-3/tweat/handler"
 	mw "github.com/gba-3/tweat/middleware"
 	"github.com/gba-3/tweat/registry"
@@ -20,6 +22,7 @@ func init() {
 }
 
 func main() {
+	setLogger()
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
@@ -34,5 +37,13 @@ func main() {
 	r.Route("/login", func(r chi.Router) {
 		r.Post("/", handler.JsonHandler(ah.Uh.Login).ServeHTTP)
 	})
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":3030", r)
+}
+
+func setLogger() {
+	logLevel := os.Getenv("LEVEL")
+	if logLevel == "" {
+		logLevel = "INFO"
+	}
+	gologger.SetLogger(logLevel)
 }

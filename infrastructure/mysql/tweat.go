@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"strings"
+
 	"github.com/gba-3/tweat/domain/entity"
 	"github.com/jmoiron/sqlx"
 )
@@ -18,7 +20,14 @@ func NewMysql(db *sqlx.Tx) *TweatMysql {
 }
 
 func (m *TweatMysql) GetAll(userID string) (entity.TweatLikesList, error) {
-	likesRows, err := m.db.Queryx("SELECT tweats.id, tweats.text, tweats.user_id, count(likes.id) likes_count FROM tweats INNER JOIN likes ON `tweats`.id=`likes`.tweat_id WHERE `tweats`.user_id=? GROUP BY tweats.id", userID)
+	query := strings.Join([]string{
+		"SELECT tweats.id, tweats.text, tweats.user_id, count(likes.id) likes_count, users.name user_name",
+		"FROM tweats",
+		"LEFT JOIN likes ON `tweats`.id=`likes`.tweat_id",
+		"LEFT JOIN users ON `tweats`.user_id=`users`.id",
+		"WHERE `tweats`.user_id=? GROUP BY tweats.id",
+	}, " ")
+	likesRows, err := m.db.Queryx(query, userID)
 	if err != nil {
 		return nil, err
 	}

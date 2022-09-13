@@ -1,10 +1,11 @@
 package entity
 
 type TweatLikes struct {
-	ID     int    `db:"id"`
-	Text   string `db:"text"`
-	UserID int    `db:"user_id"`
-	Likes  int    `db:"likes_count"`
+	ID       int    `db:"id"`
+	Text     string `db:"text"`
+	UserID   int    `db:"user_id"`
+	Likes    int    `db:"likes_count"`
+	UserName string `db:"user_name"`
 }
 
 type TweatLikesList []TweatLikes

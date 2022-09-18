@@ -25,7 +25,9 @@ func (m *TweatMysql) GetAll(userID string) (entity.TweatLikesList, error) {
 		"FROM tweats",
 		"LEFT JOIN likes ON `tweats`.id=`likes`.tweat_id",
 		"LEFT JOIN users ON `tweats`.user_id=`users`.id",
-		"WHERE `tweats`.user_id=? GROUP BY tweats.id",
+		"WHERE tweats.user_id IN",
+		"(SELECT follow_user_id FROM follows WHERE follows.user_id=?)",
+		"GROUP BY tweats.id",
 	}, " ")
 	likesRows, err := m.db.Queryx(query, userID)
 	if err != nil {

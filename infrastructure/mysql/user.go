@@ -46,3 +46,23 @@ func (um *UserMysql) CreateUser(name string, email string, password string) erro
 	}
 	return nil
 }
+
+func (um *UserMysql) GetFollowUsers(userID int) (entity.Follows, error) {
+	query := strings.Join([]string{
+		"SELECT * FROM follows",
+		"WHERE user_id=?",
+	}, " ")
+	rows, err := um.db.Queryx(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	follows := entity.Follows{}
+	for rows.Next() {
+		var follow entity.Follow
+		if err := rows.StructScan(&follow); err != nil {
+			return nil, err
+		}
+		follows = append(follows, follow)
+	}
+	return follows, nil
+}

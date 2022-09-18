@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -78,6 +79,7 @@ func (uh *userHandler) Login(w http.ResponseWriter, r *http.Request) (int, inter
 	if err != nil {
 		return http.StatusBadRequest, err.Error(), err
 	}
+	log.Printf("%#v\n", user)
 
 	// パスワード検証
 	// 第一引数がハッシュ化されたパスワード(DBに保存されているパスワード)

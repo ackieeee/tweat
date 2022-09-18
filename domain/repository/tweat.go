@@ -28,12 +28,18 @@ func (tr *tweatRepository) GetAll(ctx context.Context, userID string) (entity.Tw
 	tweats, err := mysql.NewMysql(tx).GetAll(userID)
 
 	if err != nil {
-		tx.Rollback()
+		err := tx.Rollback()
+		if err != nil {
+			return nil, err
+		}
 		return nil, err
 	}
 
 	if err := tx.Commit(); err != nil {
-		tx.Rollback()
+		err := tx.Rollback()
+		if err != nil {
+			return nil, err
+		}
 		return nil, err
 	}
 	return tweats, nil

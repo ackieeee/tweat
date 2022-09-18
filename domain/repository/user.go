@@ -29,7 +29,17 @@ func (ur *userRepository) FindByEmail(email string, password string) (*entity.Us
 	}
 
 	db := adapter.Tweat()
-	return mysql.NewUserMysql(db).FindByEmail(email)
+	um := mysql.NewUserMysql(db)
+	user, err := um.FindByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+	follows, err := um.GetFollowUsers(user.ID)
+	if err != nil {
+		return nil, err
+	}
+	user.Follows = follows
+	return user, nil
 }
 
 func (ur *userRepository) CreateUser(name string, email string, password string) error {

@@ -17,3 +17,18 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
     (3, 'testname3', 'test3@test.email.com', '$2a$10$hEMqR7m/llJ2AaMl55t4Tu2XhXVxEVf41fFDd2SJkBrYhN.QFqPVK'),
     (4, 'testname4', 'test4@test.email.com', '$2a$10$hEMqR7m/llJ2AaMl55t4Tu2XhXVxEVf41fFDd2SJkBrYhN.QFqPVK'),
     (5, 'testname5', 'test5@test.email.com', '$2a$10$hEMqR7m/llJ2AaMl55t4Tu2XhXVxEVf41fFDd2SJkBrYhN.QFqPVK');
+
+CREATE TABLE IF NOT EXISTS `follows` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `user_id` bigint(20) unsigned NOT NULL COMMENT 'ユーザーID',
+    `follow_user_id` bigint(20) unsigned NOT NULL COMMENT 'フォロしたユーザーID',
+    PRIMARY KEY(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `follows` (`user_id`, `follow_user_id`) VALUES
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (2, 1),
+    (3, 1),
+    (3, 4);

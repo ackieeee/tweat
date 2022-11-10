@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/gba-3/tweat/domain/entity"
 	"github.com/gba-3/tweat/infrastructure/mysql"
@@ -28,17 +29,24 @@ func (ur *userRepository) FindByEmail(email string, password string) (*entity.Us
 		return nil, errors.New("arguments error: password is emtpy.")
 	}
 
-	db := adapter.Tweat()
-	um := mysql.NewUserMysql(db)
-	user, err := um.FindByEmail(email)
+	// db := adapter.Tweat()
+	// um := mysql.NewUserMysql(db)
+	db := adapter.TweatGorm()
+	ugm := mysql.NewUserGormMysql(db)
+	user, err := ugm.FindByEmail(email)
 	if err != nil {
 		return nil, err
 	}
-	follows, err := um.GetFollowUsers(user.ID)
-	if err != nil {
-		return nil, err
-	}
-	user.Follows = follows
+	fmt.Println("user:", user)
+	// user, err := um.FindByEmail(email)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// follows, err := um.GetFollowUsers(user.ID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// user.Follows = follows
 	return user, nil
 }
 
@@ -52,6 +60,8 @@ func (ur *userRepository) CreateUser(name string, email string, password string)
 	if password == "" {
 		return errors.New("arguments error: password is emtpy.")
 	}
-	db := adapter.Tweat()
-	return mysql.NewUserMysql(db).CreateUser(name, email, password)
+	// db := adapter.Tweat()
+	// return mysql.NewUserMysql(db).CreateUser(name, email, password)
+	db := adapter.TweatGorm()
+	return mysql.NewUserGormMysql(db).CreateUser(name, email, password)
 }

@@ -5,14 +5,38 @@ import (
 
 	"github.com/gba-3/tweat/domain/entity"
 	"github.com/jmoiron/sqlx"
+	"gorm.io/gorm"
 )
 
 type UserMysql struct {
 	db *sqlx.DB
 }
 
+type UserGormMysql struct {
+	db *gorm.DB
+}
+
 func NewUserMysql(db *sqlx.DB) *UserMysql {
 	return &UserMysql{db}
+}
+
+func NewUserGormMysql(db *gorm.DB) *UserGormMysql {
+	return &UserGormMysql{db}
+}
+
+func (ugm *UserGormMysql) FindByEmail(email string) (*entity.User, error) {
+	user := entity.User{}
+	ugm.db.Where("email = ?", email).First(&user)
+	return &user, nil
+}
+
+func (ugm *UserGormMysql) CreateUser(name string, email string, password string) error {
+	user := entity.User{
+		Name:     name,
+		Email:    email,
+		Password: password,
+	}
+	return ugm.db.Create(&user).Error
 }
 
 func (um *UserMysql) FindByEmail(email string) (*entity.User, error) {

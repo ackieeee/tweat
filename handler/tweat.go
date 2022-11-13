@@ -30,5 +30,6 @@ func (th *tweatHandler) GetAll(w http.ResponseWriter, r *http.Request) (int, int
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
+
 	return http.StatusOK, tweats, nil
 }

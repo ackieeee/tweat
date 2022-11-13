@@ -12,5 +12,5 @@ curl -X POST http://localhost:3030/login -d '{"email":"test1@test.email.com", "p
 ### tweat一覧
 ```
 TOKEN=トークン
-curl -H "Authorization:Bearer ${TOKEN}" http://localhost:3000/tweats
+curl -H "Authorization:Bearer ${TOKEN}" http://localhost:3030/tweats
 ```

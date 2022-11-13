@@ -56,11 +56,7 @@ func (m *TweatMysql) GetAll(userID string) (entity.TweatLikesList, error) {
 
 func (m *TweatGormMysql) GetAll(userID string) (entity.Tweats, error) {
 	var tweats []entity.Tweat
-	// m.db.Model(&tweats).
-	// 	Select("tweats.id, tweats.text, tweats.user_id, count(likes.id) likes_count, users.name user_name").
-	// 	Joins("LEFT JOIN likes ON `tweats`.id=`likes`.tweat_id").
-	// 	Joins("LEFT JOIN users ON `tweats`.user_id=`users`.id").
-	// 	Where("tweats.user_id")
-	err := m.db.Preload("Likes").Where("user_id = ?", userID).Find(&tweats).Error
+	subQuery := m.db.Select("follow_user_id").Where("user_id = ?", userID).Table("follows")
+	err := m.db.Preload("Likes").Where("user_id IN (?)", subQuery).Find(&tweats).Error
 	return tweats, err
 }

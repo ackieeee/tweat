@@ -18,6 +18,7 @@ type tweatHandler struct {
 type TweatHandler interface {
 	GetAll(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 	AddLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
+	DeleteLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 }
 
 func NewTweatHandler(tu usecase.TweatUsecase) TweatHandler {
@@ -56,7 +57,7 @@ func (th *tweatHandler) AddLike(w http.ResponseWriter, r *http.Request) (int, in
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
-	body := valueobject.AddLikeRequest{}
+	body := valueobject.LikeRequest{}
 
 	if err := json.Unmarshal(buf, &body); err != nil {
 		return http.StatusBadRequest, nil, err
@@ -67,6 +68,28 @@ func (th *tweatHandler) AddLike(w http.ResponseWriter, r *http.Request) (int, in
 		resp["msg"] = fmt.Sprintf("failed add tweat like. tweat_id:%d, user_id:%d\n", body.TweatID, body.UserID)
 		return http.StatusBadRequest, resp, err
 	}
+	resp["msg"] = "successed."
+	return http.StatusOK, resp, nil
+}
+
+func (th *tweatHandler) DeleteLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+	ctx := r.Context()
+	buf, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+	defer r.Body.Close()
+	body := valueobject.LikeRequest{}
+	if err := json.Unmarshal(buf, &body); err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	resp := map[string]string{}
+	if err := th.tu.DeleteLike(ctx, body.TweatID, body.UserID); err != nil {
+		resp["msg"] = fmt.Sprintf("failed delete like. tweat_id:%d, user_id:%d\n", body.TweatID, body.UserID)
+		return http.StatusBadRequest, nil, err
+	}
+
 	resp["msg"] = "successed."
 	return http.StatusOK, resp, nil
 }

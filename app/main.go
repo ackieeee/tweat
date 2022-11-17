@@ -32,6 +32,7 @@ func main() {
 		r.Get("/", handler.JsonHandler(ah.Th.GetAll).ServeHTTP)
 		r.Route("/like", func(r chi.Router) {
 			r.Post("/add", handler.JsonHandler(ah.Th.AddLike).ServeHTTP)
+			r.Post("/delete", handler.JsonHandler(ah.Th.DeleteLike).ServeHTTP)
 		})
 	})
 	r.Route("/signup", func(r chi.Router) {

@@ -1,6 +1,6 @@
 package valueobject
 
-type AddLikeRequest struct {
+type LikeRequest struct {
 	TweatID int `json:"tweat_id"`
 	UserID  int `json:"user_id"`
 }

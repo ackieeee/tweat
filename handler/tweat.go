@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/gba-3/tweat/domain/valueobject"
 	"github.com/gba-3/tweat/usecase"
 )
 
@@ -31,5 +32,16 @@ func (th *tweatHandler) GetAll(w http.ResponseWriter, r *http.Request) (int, int
 		return http.StatusBadRequest, nil, err
 	}
 
-	return http.StatusOK, tweats, nil
+	resp := []valueobject.TweatResponse{}
+	for _, tweat := range tweats {
+		t := valueobject.TweatResponse{
+			ID:     tweat.ID,
+			Text:   tweat.Text,
+			Likes:  uint(len(tweat.Likes)),
+			UserID: tweat.UserID,
+		}
+		resp = append(resp, t)
+	}
+
+	return http.StatusOK, resp, nil
 }

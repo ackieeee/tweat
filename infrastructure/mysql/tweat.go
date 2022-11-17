@@ -63,3 +63,16 @@ func (m *TweatGormMysql) GetAll(userID string) (entity.Tweats, error) {
 		Error
 	return tweats, err
 }
+
+func (m *TweatGormMysql) AddLike(tweatID int, userID int) error {
+	like := entity.Like{
+		TweatID: uint(tweatID),
+		UserID:  uint(userID),
+	}
+	return m.db.Create(&like).Error
+}
+
+func (m *TweatGormMysql) DeleteLike(tweatID int, userID int) error {
+	var like entity.Like
+	return m.db.Where("tweat_id = ? AND user_id = ?", tweatID, userID).Delete(&like).Error
+}

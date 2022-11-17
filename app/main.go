@@ -30,6 +30,9 @@ func main() {
 	r.Route("/tweats", func(r chi.Router) {
 		r.Use(mw.WithToken)
 		r.Get("/", handler.JsonHandler(ah.Th.GetAll).ServeHTTP)
+		r.Route("/like", func(r chi.Router) {
+			r.Post("/add", handler.JsonHandler(ah.Th.AddLike).ServeHTTP)
+		})
 	})
 	r.Route("/signup", func(r chi.Router) {
 		r.Post("/", handler.JsonHandler(ah.Uh.Signup).ServeHTTP)

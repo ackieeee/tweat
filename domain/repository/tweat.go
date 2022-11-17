@@ -13,6 +13,8 @@ type tweatRepository struct {
 
 type TweatRepository interface {
 	GetAll(ctx context.Context, userID string) (entity.Tweats, error)
+	AddLike(ctx context.Context, tweatID int, userID int) error
+	DeleteLike(ctx context.Context, tweatID int, userID int) error
 }
 
 func NewTweatRepository() TweatRepository {
@@ -47,4 +49,14 @@ func (tr *tweatRepository) GetAll(ctx context.Context, userID string) (entity.Tw
 		return nil, err
 	}
 	return tweats, nil
+}
+
+func (tr *tweatRepository) AddLike(ctx context.Context, tweatID int, userID int) error {
+	db := adapter.TweatGorm()
+	return mysql.NewTweatGormMysql(db).AddLike(tweatID, userID)
+}
+
+func (tr *tweatRepository) DeleteLike(ctx context.Context, tweatID int, userID int) error {
+	db := adapter.TweatGorm()
+	return mysql.NewTweatGormMysql(db).DeleteLike(tweatID, userID)
 }

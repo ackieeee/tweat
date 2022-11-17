@@ -13,6 +13,8 @@ type tweatUsecase struct {
 
 type TweatUsecase interface {
 	GetAll(ctx context.Context, userID string) (entity.Tweats, error)
+	AddLike(ctx context.Context, tweatID int, userID int) error
+	DeleteLike(ctx context.Context, tweatID int, userID int) error
 }
 
 func NewTweatUsecase(tr repository.TweatRepository) TweatUsecase {
@@ -25,4 +27,12 @@ func (tu *tweatUsecase) GetAll(ctx context.Context, userID string) (entity.Tweat
 		return nil, err
 	}
 	return tweats, nil
+}
+
+func (tu *tweatUsecase) AddLike(ctx context.Context, tweatID int, userID int) error {
+	return tu.tr.AddLike(ctx, tweatID, userID)
+}
+
+func (tu *tweatUsecase) DeleteLike(ctx context.Context, tweatID int, userID int) error {
+	return tu.tr.DeleteLike(ctx, tweatID, userID)
 }

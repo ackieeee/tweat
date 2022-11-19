@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/gba-3/tweat/domain/valueobject"
 	"github.com/gba-3/tweat/usecase"
@@ -39,11 +40,21 @@ func (th *tweatHandler) GetAll(w http.ResponseWriter, r *http.Request) (int, int
 
 	resp := []valueobject.TweatResponse{}
 	for _, tweat := range tweats {
+		likes := []valueobject.Like{}
+		for _, tl := range tweat.Likes {
+			l := valueobject.Like{
+				ID:      tl.ID,
+				TweatID: tl.TweatID,
+				UserID:  tl.UserID,
+			}
+			likes = append(likes, l)
+		}
 		t := valueobject.TweatResponse{
-			ID:     tweat.ID,
-			Text:   tweat.Text,
-			Likes:  uint(len(tweat.Likes)),
-			UserID: tweat.UserID,
+			ID:       tweat.ID,
+			Text:     tweat.Text,
+			Likes:    likes,
+			UserID:   tweat.UserID,
+			UserName: tweat.User.Name,
 		}
 		resp = append(resp, t)
 	}
@@ -53,6 +64,12 @@ func (th *tweatHandler) GetAll(w http.ResponseWriter, r *http.Request) (int, int
 
 func (th *tweatHandler) AddLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	ctx := r.Context()
+	uv := ctx.Value("userID")
+	userID, ok := uv.(string)
+	if !ok {
+		return http.StatusInternalServerError, nil, errors.New("Can not get user_id.")
+	}
+
 	buf, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
@@ -63,9 +80,13 @@ func (th *tweatHandler) AddLike(w http.ResponseWriter, r *http.Request) (int, in
 		return http.StatusBadRequest, nil, err
 	}
 
+	uid, err := strconv.Atoi(userID)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
 	resp := map[string]string{}
-	if err := th.tu.AddLike(ctx, body.TweatID, body.UserID); err != nil {
-		resp["msg"] = fmt.Sprintf("failed add tweat like. tweat_id:%d, user_id:%d\n", body.TweatID, body.UserID)
+	if err := th.tu.AddLike(ctx, body.TweatID, uid); err != nil {
+		resp["msg"] = fmt.Sprintf("failed add tweat like. tweat_id:%d, user_id:%d\n", body.TweatID, uid)
 		return http.StatusBadRequest, resp, err
 	}
 	resp["msg"] = "successed."

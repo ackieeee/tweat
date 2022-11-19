@@ -57,7 +57,9 @@ func (m *TweatMysql) GetAll(userID string) (entity.TweatLikesList, error) {
 func (m *TweatGormMysql) GetAll(userID string) (entity.Tweats, error) {
 	var tweats []entity.Tweat
 	subQuery := m.db.Select("follow_user_id").Where("user_id = ?", userID).Table("follows")
-	err := m.db.Debug().Preload("Likes").
+	err := m.db.Debug().
+		Preload("Likes").
+		Preload("User").
 		Where("user_id IN (?) AND parent_id IS NULL", subQuery).
 		Find(&tweats).
 		Error

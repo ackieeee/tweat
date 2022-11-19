@@ -15,6 +15,7 @@ type Tweat struct {
 	Text   string
 	UserID uint
 	Likes  []Like
+	User   User
 }
 
 type Tweats []Tweat

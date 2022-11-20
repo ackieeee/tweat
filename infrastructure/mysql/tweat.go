@@ -66,11 +66,33 @@ func (m *TweatGormMysql) GetAll(userID string) (entity.Tweats, error) {
 	return tweats, err
 }
 
+func (m *TweatGormMysql) ExistsLike(tweatID int, userID int) bool {
+	like := entity.Like{}
+	var exits bool
+	err := m.db.Model(&like).
+		Select("count(*) > 0").
+		Where("tweat_id = ? AND user_id = ?", tweatID, userID).
+		Find(&exits).
+		Error
+	if err != nil {
+		return false
+	}
+
+	if !exits {
+		return false
+	}
+	return true
+}
+
 func (m *TweatGormMysql) AddLike(tweatID int, userID int) error {
+	// if exists := m.ExistsLike(tweatID, userID); exists {
+	// 	return nil
+	// }
 	like := entity.Like{
 		TweatID: uint(tweatID),
 		UserID:  uint(userID),
 	}
+
 	return m.db.Create(&like).Error
 }
 

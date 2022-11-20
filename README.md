@@ -17,10 +17,10 @@ curl -H "Authorization:Bearer ${TOKEN}" http://localhost:3030/tweats
 
 ### いいね追加
 ```
-curl -X POST -H "Authorization:Bearer ${TOKEN}" http://localhost:3030/tweats/like/add -d '{"tweat_id":2,"user_id":5}'
+curl -X POST -H "Authorization:Bearer ${TOKEN}" http://localhost:3030/tweats/like/toggle -d '{"tweat_id":3,"user_id":1}'
 ```
 
 ### いいね削除
 ```
-curl -X POST -H "Authorization:Bearer ${TOKEN}" http://localhost:3030/tweats/like/delete -d '{"tweat_id":2,"user_id":5}'
+curl -X POST -H "Authorization:Bearer ${TOKEN}" http://localhost:3030/tweats/like/toggle -d '{"tweat_id":2,"user_id":5}'
 ```

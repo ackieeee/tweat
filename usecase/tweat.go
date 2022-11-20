@@ -15,6 +15,7 @@ type TweatUsecase interface {
 	GetAll(ctx context.Context, userID string) (entity.Tweats, error)
 	AddLike(ctx context.Context, tweatID int, userID int) error
 	DeleteLike(ctx context.Context, tweatID int, userID int) error
+	ToggleLike(ctx context.Context, tweatID int, userID int) (bool, error)
 }
 
 func NewTweatUsecase(tr repository.TweatRepository) TweatUsecase {
@@ -35,4 +36,8 @@ func (tu *tweatUsecase) AddLike(ctx context.Context, tweatID int, userID int) er
 
 func (tu *tweatUsecase) DeleteLike(ctx context.Context, tweatID int, userID int) error {
 	return tu.tr.DeleteLike(ctx, tweatID, userID)
+}
+
+func (tu *tweatUsecase) ToggleLike(ctx context.Context, tweatID int, userID int) (bool, error) {
+	return tu.tr.ToggleLike(ctx, tweatID, userID)
 }

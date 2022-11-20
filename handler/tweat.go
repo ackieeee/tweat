@@ -20,6 +20,7 @@ type TweatHandler interface {
 	GetAll(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 	AddLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 	DeleteLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
+	ToggleLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error)
 }
 
 func NewTweatHandler(tu usecase.TweatUsecase) TweatHandler {
@@ -112,5 +113,45 @@ func (th *tweatHandler) DeleteLike(w http.ResponseWriter, r *http.Request) (int,
 	}
 
 	resp["msg"] = "successed."
+	return http.StatusOK, resp, nil
+}
+
+func (th *tweatHandler) ToggleLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+	defer r.Body.Close()
+	ctx := r.Context()
+	uv := ctx.Value("userID")
+	userID, ok := uv.(string)
+	if !ok {
+		return http.StatusInternalServerError, nil, errors.New("Can not get user_id.")
+	}
+
+	buf, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	body := valueobject.LikeRequest{}
+	if err := json.Unmarshal(buf, &body); err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	uid, err := strconv.Atoi(userID)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	resp := map[string]string{}
+	addFlag, err := th.tu.ToggleLike(ctx, body.TweatID, uid)
+	if err != nil {
+		resp["msg"] = fmt.Sprintf("failed toggle tweat likes. tweat_id:%d, user_id:%d\n", body.TweatID, uid)
+		return http.StatusBadRequest, resp, err
+	}
+
+	resp["msg"] = "successed."
+	if addFlag {
+		resp["action"] = "add"
+	} else {
+		resp["action"] = "delete"
+	}
 	return http.StatusOK, resp, nil
 }

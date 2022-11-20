@@ -15,6 +15,7 @@ type TweatRepository interface {
 	GetAll(ctx context.Context, userID string) (entity.Tweats, error)
 	AddLike(ctx context.Context, tweatID int, userID int) error
 	DeleteLike(ctx context.Context, tweatID int, userID int) error
+	ToggleLike(ctx context.Context, tweatID int, userID int) (bool, error)
 }
 
 func NewTweatRepository() TweatRepository {
@@ -59,4 +60,19 @@ func (tr *tweatRepository) AddLike(ctx context.Context, tweatID int, userID int)
 func (tr *tweatRepository) DeleteLike(ctx context.Context, tweatID int, userID int) error {
 	db := adapter.TweatGorm()
 	return mysql.NewTweatGormMysql(db).DeleteLike(tweatID, userID)
+}
+
+func (tr *tweatRepository) ToggleLike(ctx context.Context, tweatID int, userID int) (bool, error) {
+	db := adapter.TweatGorm()
+	m := mysql.NewTweatGormMysql(db)
+	if exists := m.ExistsLike(tweatID, userID); exists {
+		if err := m.DeleteLike(tweatID, userID); err != nil {
+			return false, err
+		}
+		return false, nil
+	}
+	if err := m.AddLike(tweatID, userID); err != nil {
+		return false, err
+	}
+	return true, nil
 }

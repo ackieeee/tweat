@@ -33,6 +33,7 @@ func main() {
 		r.Route("/like", func(r chi.Router) {
 			r.Post("/add", handler.JsonHandler(ah.Th.AddLike).ServeHTTP)
 			r.Post("/delete", handler.JsonHandler(ah.Th.DeleteLike).ServeHTTP)
+			r.Post("/toggle", handler.JsonHandler(ah.Th.ToggleLike).ServeHTTP)
 		})
 	})
 	r.Route("/signup", func(r chi.Router) {

@@ -1,1 +1,16 @@
-name: nancyon: ["push"]jobs:  nancy:    runs-on: ubuntu-latest    steps:      - name: Checkout        uses: actions/checkout@v3      - name: Setup go        uses: actions/setup-go@v3        with:          go-version: 1.18      - name: Setup nancy        run: go install github.com/sonatype-nexus-community/nancy@latest      - name: Nancy scan        run: go list -m all | nancy sleuth
+name: nancy
+on: ["push"]
+jobs:
+  nancy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Setup nancy
+        run: go install github.com/sonatype-nexus-community/nancy@latest
+      - name: Nancy scan
+        run: go list -m all | nancy sleuth

@@ -9,9 +9,8 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gba-3/gologger"
-	"github.com/gba-3/tweat/domain/entity"
-	"github.com/gba-3/tweat/usecase"
+	"github.com/sugartr3e/tweat/domain/entity"
+	"github.com/sugartr3e/tweat/usecase"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -57,8 +56,6 @@ func (uh *userHandler) Signup(w http.ResponseWriter, r *http.Request) (int, inte
 }
 
 func (uh *userHandler) Login(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
-	gologger.Info("start login")
-	defer gologger.Info("end login")
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return http.StatusBadRequest, err.Error(), err

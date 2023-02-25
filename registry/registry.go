@@ -1,6 +1,6 @@
 package registry
 
-import "github.com/gba-3/tweat/registry/container"
+import "github.com/sugartr3e/tweat/registry/container"
 
 func NewRegistry() *AppHandler {
 	c := container.Container{}

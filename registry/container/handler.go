@@ -1,8 +1,8 @@
 package container
 
 import (
-	"github.com/gba-3/tweat/handler"
-	"github.com/gba-3/tweat/usecase"
+	"github.com/sugartr3e/tweat/handler"
+	"github.com/sugartr3e/tweat/usecase"
 )
 
 func (c Container) GetTweatHandler(tu usecase.TweatUsecase) handler.TweatHandler {

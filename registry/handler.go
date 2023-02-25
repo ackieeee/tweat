@@ -1,6 +1,6 @@
 package registry
 
-import "github.com/gba-3/tweat/handler"
+import "github.com/sugartr3e/tweat/handler"
 
 type AppHandler struct {
 	Th handler.TweatHandler

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gba-3/tweat/domain/entity"
-	"github.com/gba-3/tweat/infrastructure/mysql"
-	"github.com/gba-3/tweat/infrastructure/mysql/adapter"
+	"github.com/sugartr3e/tweat/domain/entity"
+	"github.com/sugartr3e/tweat/infrastructure/mysql"
+	"github.com/sugartr3e/tweat/infrastructure/mysql/adapter"
 )
 
 type userRepository struct {

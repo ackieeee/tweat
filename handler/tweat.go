@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gba-3/tweat/domain/valueobject"
-	"github.com/gba-3/tweat/usecase"
+	"github.com/sugartr3e/tweat/domain/valueobject"
+	"github.com/sugartr3e/tweat/usecase"
 )
 
 type tweatHandler struct {

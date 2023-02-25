@@ -3,8 +3,8 @@ package mysql
 import (
 	"strings"
 
-	"github.com/gba-3/tweat/domain/entity"
 	"github.com/jmoiron/sqlx"
+	"github.com/sugartr3e/tweat/domain/entity"
 	"gorm.io/gorm"
 )
 

@@ -22,7 +22,7 @@ services:
         command: mysqld --user=root
         tty: true
         ports:
-            - 3306:3306
+            - 23306:3306
         environment:
             - MYSQL_ROOT_PASSWORD=tweat
             - MYSQL_USER=tweat
@@ -36,3 +36,8 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
             timeout: 5s
             retries: 10
+
+    trace:
+        image: jaegertracing/all-in-one:1
+        ports:
+            - 127.0.0.1:16686:16686

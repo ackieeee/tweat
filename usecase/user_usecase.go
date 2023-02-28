@@ -2,9 +2,9 @@ package usecase
 
 import (
 	"errors"
+	"github.com/sugartr3e/tweat/repository"
 
 	"github.com/sugartr3e/tweat/domain/entity"
-	"github.com/sugartr3e/tweat/domain/repository"
 )
 
 type userUsecase struct {

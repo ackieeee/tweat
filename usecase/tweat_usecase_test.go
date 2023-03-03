@@ -2,8 +2,9 @@ package usecase
 
 import (
 	"context"
+	"github.com/golang/mock/gomock"
+	mock_repository "github.com/sugartr3e/tweat/mock"
 	"reflect"
-	"strconv"
 	"testing"
 
 	"github.com/sugartr3e/tweat/domain/entity"
@@ -18,39 +19,52 @@ func (tr *MockTweatRepository) GetAll(ctx context.Context, userID string) (entit
 }
 
 func TestGetAll(t *testing.T) {
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	tweatRepositoryMock := mock_repository.NewMockTweatRepository(ctrl)
+
+	ctx := context.Background()
+	tweats := entity.Tweats{
+		{
+			ID:     1,
+			Text:   "test",
+			UserID: 1,
+		},
+	}
+	tweatRepositoryMock.EXPECT().GetAll(gomock.Any(), gomock.Any()).Return(tweats, nil)
+
 	testCase := struct {
-		expectList  entity.TweatLikesList
+		expectList  entity.Tweats
 		expectError error
 	}{
-		entity.TweatLikesList{
+		entity.Tweats{
 			{
 				ID:     1,
 				Text:   "test",
 				UserID: 1,
-				Likes:  3,
 			},
 		},
 		nil,
 	}
-	tr := &MockTweatRepository{
-		getAll: func(userID string) (entity.TweatLikesList, error) {
-			i, err := strconv.Atoi(userID)
-			if err != nil {
-				return nil, err
-			}
-			return entity.TweatLikesList{
-				{
-					ID:     1,
-					Text:   "test",
-					UserID: i,
-					Likes:  3,
-				},
-			}, nil
-		},
-	}
+	//tr := &MockTweatRepository{
+	//	getAll: func(userID string) (entity.TweatLikesList, error) {
+	//		i, err := strconv.Atoi(userID)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		return entity.TweatLikesList{
+	//			{
+	//				ID:     1,
+	//				Text:   "test",
+	//				UserID: i,
+	//				Likes:  3,
+	//			},
+	//		}, nil
+	//	},
+	//}
 
-	tu := NewTweatUsecase(tr)
-	ctx := context.Background()
+	tu := NewTweatUsecase(tweatRepositoryMock)
 	list, err := tu.GetAll(ctx, "1")
 	if err != nil {
 		t.Fatal(err.Error())

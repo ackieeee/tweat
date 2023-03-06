@@ -22,29 +22,7 @@ func NewTweatRepository() TweatRepository {
 }
 
 func (tr *tweatRepository) GetAll(ctx context.Context, userID string) (entity.Tweats, error) {
-	// db := adapter.Tweat()
-	// tx, err := db.Beginx()
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// tweats, err := mysql.NewMysql(tx).GetAll(userID)
-	// if err != nil {
-	// 	err := tx.Rollback()
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	return nil, err
-	// }
-
-	// if err := tx.Commit(); err != nil {
-	// 	err := tx.Rollback()
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	return nil, err
-	// }
 	db := database.GetTweatGorm()
-	//tweats, err := mysql.NewTweatGormMysql(db).GetAll(userID)
 	var tweats []entity.Tweat
 	subQuery := db.Select("follow_user_id").Where("user_id = ?", userID).Table("follows")
 	err := db.Debug().
@@ -112,14 +90,5 @@ func (tr *tweatRepository) ToggleLike(ctx context.Context, tweatID int, userID i
 	if err := tr.AddLike(ctx, tweatID, userID); err != nil {
 		return false, err
 	}
-	//if exists := m.ExistsLike(tweatID, userID); exists {
-	//	if err := m.DeleteLike(tweatID, userID); err != nil {
-	//		return false, err
-	//	}
-	//	return false, nil
-	//}
-	//if err := m.AddLike(tweatID, userID); err != nil {
-	//	return false, err
-	//}
 	return true, nil
 }

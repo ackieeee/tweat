@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/sugartr3e/tweat/middleware"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -29,7 +30,7 @@ func NewTweatHandler(tu usecase.TweatUsecase) TweatHandler {
 
 func (th *tweatHandler) GetAll(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	ctx := r.Context()
-	uv := ctx.Value("userID")
+	uv := ctx.Value(middleware.UserKey)
 	userID, ok := uv.(string)
 	if !ok {
 		return http.StatusInternalServerError, nil, errors.New("Can not get user_id.")
@@ -65,7 +66,7 @@ func (th *tweatHandler) GetAll(w http.ResponseWriter, r *http.Request) (int, int
 
 func (th *tweatHandler) AddLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	ctx := r.Context()
-	uv := ctx.Value("userID")
+	uv := ctx.Value(middleware.UserKey)
 	userID, ok := uv.(string)
 	if !ok {
 		return http.StatusInternalServerError, nil, errors.New("Can not get user_id.")
@@ -119,7 +120,7 @@ func (th *tweatHandler) DeleteLike(w http.ResponseWriter, r *http.Request) (int,
 func (th *tweatHandler) ToggleLike(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	defer r.Body.Close()
 	ctx := r.Context()
-	uv := ctx.Value("userID")
+	uv := ctx.Value(middleware.UserKey)
 	userID, ok := uv.(string)
 	if !ok {
 		return http.StatusInternalServerError, nil, errors.New("Can not get user_id.")

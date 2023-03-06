@@ -8,6 +8,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+type Key int
+
+const (
+	UserKey Key = iota
+)
+
 func WithToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("Authorization")
@@ -18,7 +24,7 @@ func WithToken(next http.Handler) http.Handler {
 		}
 
 		// ユーザーIDをコンテキストに渡す
-		ctx := context.WithValue(r.Context(), "userID", userID)
+		ctx := context.WithValue(r.Context(), UserKey, userID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

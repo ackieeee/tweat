@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 	mock_repository "github.com/sugartr3e/tweat/mock"
-	"reflect"
 	"testing"
 
 	"github.com/sugartr3e/tweat/domain/entity"
@@ -47,29 +47,10 @@ func TestGetAll(t *testing.T) {
 		},
 		nil,
 	}
-	//tr := &MockTweatRepository{
-	//	getAll: func(userID string) (entity.TweatLikesList, error) {
-	//		i, err := strconv.Atoi(userID)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		return entity.TweatLikesList{
-	//			{
-	//				ID:     1,
-	//				Text:   "test",
-	//				UserID: i,
-	//				Likes:  3,
-	//			},
-	//		}, nil
-	//	},
-	//}
-
 	tu := NewTweatUsecase(tweatRepositoryMock)
 	list, err := tu.GetAll(ctx, "1")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
-	if !reflect.DeepEqual(testCase.expectList, list) {
-		t.Fatalf("unexpected result. expected=%v actual=%v\n", testCase.expectList, list)
-	}
+	assert.Equal(t, testCase.expectList, list)
 }

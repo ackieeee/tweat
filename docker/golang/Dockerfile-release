@@ -1,0 +1,10 @@
+FROM golang:1.18.0 as builder
+
+RUN apt update && apt upgrade -y && mkdir -p /var/log/ap
+
+WORKDIR /app
+COPY ./go.mod ./go.sum ./
+RUN go mod download
+COPY . .
+RUN go build -o build ./app/main.go
+CMD ["./build"]

@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+    appserver:
+        build:
+            context: ./docker/golang
+            dockerfile: Dockerfile-release
+        container_name: tweat-appserver
+        tty: true
+        ports:
+            - 3030:3030
+        volumes:
+            - ./:/app
+    db:
+        image: mysql:8.0
+        container_name: tweat-db
+        command: mysqld --user=root
+        tty: true
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=tweat
+            - MYSQL_USER=tweat
+            - MYSQL_PASSWORD=tweat
+            - MYSQL_DATABASE=tweat
+        volumes:
+            - ./data:/data
+            - ./database/sql:/docker-entrypoint-initdb.d
+            - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            timeout: 5s
+            retries: 10
